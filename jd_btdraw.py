@@ -7,22 +7,22 @@ cron: 23 10 * * *
 new Env('京东金融天天试手气');
 """
 
-
-import requests
 import json
-import time
 import os
+import random
 import re
 import sys
-import random
-import string
+import time
 import urllib
+
+import requests
 
 try:
     import execjs
 except:
     print('缺少依赖文件PyExecJS,请先去Python3安装PyExecJS后再执行')
     sys.exit(0)
+
 
 def printf(text):
     print(text)

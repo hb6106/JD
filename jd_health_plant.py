@@ -28,8 +28,6 @@ new Env('京东健康社区-种植园自动任务');
 
 '''
 
-
-
 ######################################################以下代码请不要乱改######################################
 
 UserAgent = ''
@@ -39,21 +37,22 @@ charge_targe_id = ''
 cookies = []
 charge_targe_ids = ''
 
+import datetime
+import time
+from urllib.parse import unquote
+
+import os
+import random
+import re
 import requests
-import time,datetime
-import requests,re,os,sys,random,json
-from urllib.parse import quote, unquote
-import threading
-import urllib3
-#urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+import sys
+
+# urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 requests.packages.urllib3.disable_warnings()
 
-
-
-
 today = datetime.datetime.now().strftime('%Y-%m-%d')
-tomorrow=(datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+tomorrow = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
 
 nowtime = datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S.%f8')
 

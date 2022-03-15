@@ -6,16 +6,14 @@ new Env('京东试用成功通知');
 """
 
 
-import requests
 import json
-import time
 import os
+import random
 import re
 import sys
-import random
-import string
 import urllib
 
+import requests
 
 
 #以下部分参考Curtin的脚本：https://github.com/curtinlv/JD-Script

@@ -2,14 +2,14 @@
 '''
 new Env('wskey转换');
 '''
-import socket
 import base64
 import json
-import os
-import sys
 import logging
-import time
+import os
 import re
+import socket
+import sys
+import time
 
 if "WSKEY_DEBUG" in os.environ:
     logging.basicConfig(level=logging.DEBUG, format='%(message)s')

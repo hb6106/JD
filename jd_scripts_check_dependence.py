@@ -9,8 +9,9 @@ cron: 1
 new Env('单容器 二叉树修复脚本依赖文件');
 '''
 
-import os, requests
+import os
 import os.path
+import requests
 import time
 
 # from os import popen

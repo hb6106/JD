@@ -1,6 +1,6 @@
-let common = require("./function/common");
+let common = require("./common");
 let $ = new common.env('京东验证码获取');
-let validator = require("./function/jdValidate");
+let validator = require("./jdValidate");
 let fs = require("fs");
 let min = 2,
     help = $.config[$.filename(__filename)] || Math.min(min, $.config.JdMain) || min;

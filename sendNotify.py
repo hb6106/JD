@@ -1,29 +1,29 @@
 #!/usr/bin/env python3
 # _*_ coding:utf-8 _*_
 
-#Modify: Kirin
+# Modify: Kirin
 
-import sys
-import os, re
-import requests
-import json
-import time
-import hmac
-import hashlib
 import base64
+import hashlib
+import hmac
+import json
+import os
+import re
+import sys
+import time
 import urllib.parse
-from requests.adapters import HTTPAdapter
-from urllib3.util import Retry
+
+import requests
 
 cur_path = os.path.abspath(os.path.dirname(__file__))
 root_path = os.path.split(cur_path)[0]
 sys.path.append(root_path)
 
 # 通知服务
-BARK = ''                   # bark服务,自行搜索; secrets可填;
-BARK_PUSH=''                # bark自建服务器，要填完整链接，结尾的/不要
-SCKEY = ''                  # Server酱的SCKEY; secrets可填
-TG_BOT_TOKEN = ''           # tg机器人的TG_BOT_TOKEN; secrets可填1407203283:AAG9rt-6RDaaX0HBLZQq0laNOh898iFYaRQ
+BARK = ''  # bark服务,自行搜索; secrets可填;
+BARK_PUSH = ''  # bark自建服务器，要填完整链接，结尾的/不要
+SCKEY = ''  # Server酱的SCKEY; secrets可填
+TG_BOT_TOKEN = ''  # tg机器人的TG_BOT_TOKEN; secrets可填1407203283:AAG9rt-6RDaaX0HBLZQq0laNOh898iFYaRQ
 TG_USER_ID = ''             # tg机器人的TG_USER_ID; secrets可填 1434078534
 TG_API_HOST=''              # tg 代理api
 TG_PROXY_IP = ''            # tg机器人的TG_PROXY_IP; secrets可填

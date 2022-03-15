@@ -14,7 +14,7 @@ const querystring = require('querystring');
 const exec = require('child_process').exec;
 const $ = new Env();
 const timeout = 15000; //超时时间(单位毫秒)
-console.log("加载sendNotify，当前版本: 20220217");
+console.log("加载sendNotify，当前版本: 20220306");
 // =======================================go-cqhttp通知设置区域===========================================
 //gobot_url 填写请求地址http://127.0.0.1/send_private_msg
 //gobot_token 填写在go-cqhttp文件设置的访问密钥
@@ -173,9 +173,9 @@ if (process.env.NOTIFY_SHOWNAMETYPE) {
         console.log("检测到显示备注名称，格式为: 备注");
 }
 async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By ccwav Mod', strsummary = "") {
-    console.log(`开始发送通知...`); 
-	
-	//NOTIFY_FILTERBYFILE代码来自Ca11back.
+    console.log(`开始发送通知...`);
+
+    //NOTIFY_FILTERBYFILE代码来自Ca11back.
     if (process.env.NOTIFY_FILTERBYFILE) {
         var no_notify = process.env.NOTIFY_FILTERBYFILE.split('&');
         if (module.parent.filename) {
@@ -191,7 +191,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
             }
         }
     }
-	
+
     try {
         //Reset 变量
         UseGroupNotify = 1;
@@ -472,7 +472,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
         const titleIndexGp6 = notifyGroup6List.findIndex((item) => item === strTitle);
 		const notifyGroup7List = process.env.NOTIFY_GROUP7_LIST ? process.env.NOTIFY_GROUP7_LIST.split('&') : [];
         const titleIndexGp7 = notifyGroup7List.findIndex((item) => item === strTitle);
-		
+
         if (titleIndex2 !== -1) {
             console.log(`${strTitle} 在群组2推送名单中，初始化群组推送`);
             UseGroupNotify = 2;
@@ -1241,7 +1241,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                 GOTIFY_PRIORITY = process.env.GOTIFY_PRIORITY6;
             }
             break;
-			
+
 		case 7:
             //==========================第七套环境变量赋值=========================
 
@@ -1587,7 +1587,7 @@ function getQLinfo(strCK, intcreated, strTimestamp, strRemark) {
     var strCheckCK = strCK.match(/pt_key=([^; ]+)(?=;?)/) && strCK.match(/pt_key=([^; ]+)(?=;?)/)[1];
     var strPtPin = decodeURIComponent(strCK.match(/pt_pin=([^; ]+)(?=;?)/) && strCK.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
     var strReturn = "";
-    if (strCheckCK.substring(0, 4) == "AAJh") {
+    if (strCheckCK.substring(0, 3) == "AAJ") {
         var DateCreated = new Date(intcreated);
         var DateTimestamp = new Date(strTimestamp);
         var DateToday = new Date();
@@ -1600,15 +1600,15 @@ function getQLinfo(strCK, intcreated, strTimestamp, strRemark) {
                     if (TempRemarkList[j]) {
                         if (TempRemarkList[j].length == 13) {
                             DateTimestamp = new Date(parseInt(TempRemarkList[j]));
-                            //console.log(strPtPin + ": 获取登录时间成功:" + GetDateTime(DateTimestamp));                            
+                            //console.log(strPtPin + ": 获取登录时间成功:" + GetDateTime(DateTimestamp));
                             break;
                         }
                     }
                 }
             }
         }
-		
-		//过期时间
+
+        //过期时间
         var UseDay = Math.ceil((DateToday.getTime() - DateCreated.getTime()) / 86400000);
         var LogoutDay = 30 - Math.ceil((DateToday.getTime() - DateTimestamp.getTime()) / 86400000);
         if (LogoutDay < 1) {
@@ -1972,57 +1972,58 @@ function BarkNotify(text, desp, params = {}) {
 }
 
 function tgBotNotify(text, desp) {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
         if (TG_BOT_TOKEN && TG_USER_ID) {
             const options = {
                 url: `https://${TG_API_HOST}/bot${TG_BOT_TOKEN}/sendMessage`,
-                body: `chat_id=${TG_USER_ID}&text=${text}\n\n${desp}&disable_web_page_preview=true`,
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                json: {
+                    chat_id: `${TG_USER_ID}`,
+                    text: `${text}\n\n${desp}`,
+                    disable_web_page_preview: true,
                 },
-                timeout,
-            };
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                timeout
+            }
             if (TG_PROXY_HOST && TG_PROXY_PORT) {
-                const tunnel = require('tunnel');
+                const tunnel = require("tunnel");
                 const agent = {
                     https: tunnel.httpsOverHttp({
                         proxy: {
                             host: TG_PROXY_HOST,
                             port: TG_PROXY_PORT * 1,
-                            proxyAuth: TG_PROXY_AUTH,
-                        },
-                    }),
-                };
-                Object.assign(options, {
-                    agent
-                });
+                            proxyAuth: TG_PROXY_AUTH
+                        }
+                    })
+                }
+                Object.assign(options, {agent})
             }
             $.post(options, (err, resp, data) => {
                 try {
                     if (err) {
-                        console.log('telegram发送通知消息失败！！\n');
+                        console.log('telegram发送通知消息失败！！\n')
                         console.log(err);
                     } else {
                         data = JSON.parse(data);
                         if (data.ok) {
-                            console.log('Telegram发送通知消息成功🎉。\n');
+                            console.log('Telegram发送通知消息成功�。\n')
                         } else if (data.error_code === 400) {
-                            console.log('请主动给bot发送一条消息并检查接收用户ID是否正确。\n');
+                            console.log('请主动给bot发送一条消息并检查接收用户ID是否正确。\n')
                         } else if (data.error_code === 401) {
-                            console.log('Telegram bot token 填写错误。\n');
+                            console.log('Telegram bot token 填写错误。\n')
                         }
                     }
                 } catch (e) {
                     $.logErr(e, resp);
-                }
-                finally {
+                } finally {
                     resolve(data);
                 }
-            });
+            })
         } else {
-            resolve();
+            resolve()
         }
-    });
+    })
 }
 
 function ddBotNotify(text, desp) {

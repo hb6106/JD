@@ -7,6 +7,7 @@ cron: 23 10 * * *
 new Env('京东金融天天试手气');
 """
 
+
 import json
 import os
 import random
@@ -22,7 +23,6 @@ try:
 except:
     print('缺少依赖文件PyExecJS,请先去Python3安装PyExecJS后再执行')
     sys.exit(0)
-
 
 def printf(text):
     print(text)
@@ -113,41 +113,6 @@ def geteid(a,d):
     response=requests.post(url=url,headers=headers,data=data)
     return response.text
 
-def getactivityid(ck):
-    homepageurl='https://ms.jr.jd.com/gw/generic/bt/h5/m/btJrFirstScreen'
-    data='reqData={"environment":"2","clientType":"ios","clientVersion":"6.2.60"}'
-    try:
-        headers={
-            'Host':'ms.jr.jd.com',
-            'Content-Type':'application/x-www-form-urlencoded',
-            'Origin':'https://mcr.jd.com',
-            'Accept-Encoding':'gzip, deflate, br',
-            'Cookie':ck,
-            'Connection':'keep-alive',
-            'Accept':'application/json, text/plain, */*',
-            'User-Agent':UserAgent,
-            'Referer':'https://mcr.jd.com/',
-            'Content-Length':'71',
-            'Accept-Language':'zh-CN,zh-Hans;q=0.9'
-            }
-        homepageresponse=requests.post(url=homepageurl,headers=headers,data=data)
-        for i in range(len(json.loads(homepageresponse.text)['resultData']['data']['activity']['data']['couponsRight'])):
-            if json.loads(homepageresponse.text)['resultData']['data']['activity']['data']['couponsRight'][i]['resName'].find('天天试手气')!=-1:
-                activityurl=json.loads(homepageresponse.text)['resultData']['data']['activity']['data']['couponsRight'][i]['jumpUrl']['jumpUrl']+'&jrcontainer=h5&jrlogin=true&jrcloseweb=false'
-                break
-        htmlheaders={
-            'accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'user-agent':UserAgent,
-            'accept-language':'zh-CN,zh-Hans;q=0.9',
-            'accept-encoding':'gzip, deflate, br'
-            }
-        activityhtml=requests.get(url=activityurl,headers=htmlheaders)
-        activityid=re.search(r"activityId=.{28}",activityhtml.text,re.M|re.I).group().replace('activityId=','')
-        print('活动id:'+activityid)
-        return activityid
-    except:
-        printf('获取活动id失败，程序即将退出')
-        os._exit(0)
 def draw(activityid,eid,fp):
     global sendNotifyflag
     global prizeAward
@@ -156,19 +121,19 @@ def draw(activityid,eid,fp):
     url='https://jrmkt.jd.com/activity/newPageTake/takePrize'
     data=f'activityId={activityid}&eid={eid}&fp={fp}'
     headers={
-        'Host':'jrmkt.jd.com',
-        'Accept':'application/json, text/javascript, */*; q=0.01',
-        'X-Requested-With':'XMLHttpRequest',
-        'Accept-Language':'zh-CN,zh-Hans;q=0.9',
-        'Accept-Encoding':'gzip, deflate, br',
-        'Content-Type':'application/x-www-form-urlencoded; charset=UTF-8',
-        'Origin':'https://jrmkt.jd.com',
-        'User-Agent':UserAgent,
-        'Connection':'keep-alive',
-        'Referer':'https://ms.jr.jd.com/gw/generic/bt/h5/m/btJrFirstScreen',
-        'Content-Length':str(len(data)),
-        'Cookie':ck
-        }
+        'Host': 'jrmkt.jd.com',
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Origin': 'https://jrmkt.jd.com',
+        'User-Agent': UserAgent,
+        'Connection': 'keep-alive',
+        'Referer': 'https://jrmkt.jd.com/ptp/wl/vouchers.html?activityId=Q029794F612c2E2O1D2a0N161v0Z2i2s9nJ&jrcontainer=h5&jrlogin=true&jrcloseweb=false',
+        'Content-Length': str(len(data)),
+        'Cookie': ck
+    }
     response=requests.post(url=url,headers=headers,data=data)
     try:
         if json.loads(response.text)['prizeModels'][0]['prizeAward'].find('元')!=-1:
@@ -188,11 +153,8 @@ if __name__ == '__main__':
     printf('游戏入口:京东金融-白条-天天试手气\n')
     remarkinfos={}
     get_remarkinfo()
-    UserAgent=randomuserAgent()
     try:
         cks = os.environ["JD_COOKIE"].split("&")
-        UserAgent=randomuserAgent()
-        activityid=getactivityid(cks[0])
     except:
         f = open("/jd/config/config.sh", "r", encoding='utf-8')
         cks = re.findall(r'Cookie[0-9]*="(pt_key=.*?;pt_pin=.*?;)"', f.read())
@@ -213,6 +175,6 @@ if __name__ == '__main__':
         info=JDSignValidator('https://prodev.m.jd.com/mall/active/498THTs5KGNqK5nEaingGsKEi6Ao/index.html')
         eid=json.loads(geteid(info[1],info[2]).split('_*')[1])['eid']
         fp=info[0]
-        draw(activityid,eid,fp)
+        draw('Q72966994128142102X259KS', eid, fp)
         if sendNotifyflag:
             send('京东白条抽奖通知',username+'抽到'+str(prizeAward)+'的优惠券了，速去京东金融-白条-天天试手气查看')

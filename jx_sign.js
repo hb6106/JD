@@ -201,20 +201,23 @@ async function main(help = true) {
 
 // 查询信息
 function signhb(type = 1) {
-  let body = '';
-  if ($.signhb_source === '5') body = `type=0&signhb_source=${$.signhb_source}&smp=&ispp=1&tk=`
-  return new Promise((resolve) => {
-    $.get(taskUrl("signhb/query", body), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(JSON.stringify(err));
-          console.log(`${$.name} query签到 API请求失败，请检查网路重试`);
-        } else {
-          data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1])
-          if ($.signhb_source === '5') {
-            $.sqactive = '';
-            if (!data.sqactive) return
-            $.sqactive = data.sqactive
+    let functionId = 'signhb/query', body = '';
+    if ($.signhb_source === '5') {
+        functionId = 'signhb/query_jxpp'
+        body = `type=0&signhb_source=${$.signhb_source}&smp=&ispp=1&tk=`
+    }
+    return new Promise((resolve) => {
+        $.get(taskUrl(functionId, body), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(JSON.stringify(err));
+                    console.log(`${$.name} query签到 API请求失败，请检查网路重试`);
+                } else {
+                    data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1])
+                    if ($.signhb_source === '5') {
+                        $.sqactive = '';
+                        if (!data.sqactive) return
+                        $.sqactive = data.sqactive
           }
           const {
             smp,
@@ -285,18 +288,26 @@ function signhb(type = 1) {
 
 // 签到 助力
 function helpSignhb(smp = '') {
-  return new Promise((resolve) => {
-    $.get(taskUrl("signhb/query", `type=1&signhb_source=${$.signhb_source}&smp=${smp}&ispp=1&tk=`), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(JSON.stringify(err))
-          console.log(`${$.name} query助力 API请求失败，请检查网路重试`)
-        } else {
-          data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1])
-          const {
-            signlist = []
-          } = data
-          for (let key of Object.keys(signlist)) {
+    let functionId, body;
+    if ($.signhb_source === '5') {
+        functionId = 'signhb/query_jxpp'
+        body = `type=1&signhb_source=${$.signhb_source}&smp=&ispp=1&tk=`
+    } else {
+        functionId = 'signhb/query'
+        body = `type=1&signhb_source=${$.signhb_source}&smp=${smp}&ispp=0&tk=`
+    }
+    return new Promise((resolve) => {
+        $.get(taskUrl(functionId, body), async (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log(JSON.stringify(err))
+                    console.log(`${$.name} query助力 API请求失败，请检查网路重试`)
+                } else {
+                    data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1])
+                    const {
+                        signlist = []
+                    } = data
+                    for (let key of Object.keys(signlist)) {
             let vo = signlist[key]
             if (vo.istoday === 1) {
               if (vo.status === 1 && data.todaysign === 1) {
@@ -319,24 +330,26 @@ function helpSignhb(smp = '') {
 
 // 任务
 function dotask(task) {
-  let body;
+    let functionId, body;
   if ($.signhb_source === '5') {
-    body = `task=${task}&signhb_source=${$.signhb_source}&ispp=1&sqactive=${$.sqactive}&tk=`
+      functionId = 'signhb/dotask_jxpp'
+      body = `task=${task}&signhb_source=${$.signhb_source}&ispp=1&sqactive=${$.sqactive}&tk=`
   } else {
-    body = `task=${task}&signhb_source=${$.signhb_source}&ispp=1&tk=`
+      functionId = 'signhb/dotask'
+      body = `task=${task}&signhb_source=${$.signhb_source}&ispp=0&sqactive=&tk=`
   }
   return new Promise((resolve) => {
-    $.get(taskUrl("signhb/dotask", body), async (err, resp, data) => {
-        try {
-          if (err) {
-            console.log(JSON.stringify(err));
-            console.log(`${$.name} dotask API请求失败，请检查网路重试`);
-          } else {
-            data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1])
-            if (data.ret === 0) {
-              console.log($.signhb_source === '5' ? `完成任务 获得${data.sendxd}喜豆` : `完成任务 获得${data.sendhb}红包`);
-            } else if (data.ret === 1003) {
-              console.log(`此账号已黑`);
+      $.get(taskUrl(functionId, body), async (err, resp, data) => {
+          try {
+              if (err) {
+                  console.log(JSON.stringify(err));
+                  console.log(`${$.name} dotask API请求失败，请检查网路重试`);
+              } else {
+                  data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1])
+                  if (data.ret === 0) {
+                      console.log($.signhb_source === '5' ? `完成任务 获得${data.sendxd}喜豆` : `完成任务 获得${data.sendhb}红包`);
+                  } else if (data.ret === 1003) {
+                      console.log(`此账号已黑`);
               $.black = true;
             } else {
               console.log(JSON.stringify(data));
@@ -353,24 +366,26 @@ function dotask(task) {
 
 // 宝箱
 function bxdraw() {
-  let body;
+    let functionId, body;
   if ($.signhb_source === '5') {
-    body = `ispp=1&sqactive=${$.sqactive}&tk=`
+      functionId = "signhb/bxdraw_jxpp"
+      body = `ispp=1&sqactive=${$.sqactive}&tk=`
   } else {
-    body = `ispp=1&tk=`
+      functionId = "signhb/bxdraw"
+      body = `ispp=0&sqactive=&tk=`
   }
   return new Promise((resolve) => {
-    $.get(taskUrl("signhb/bxdraw", body), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(JSON.stringify(err));
-          console.log(`${$.name} bxdraw API请求失败，请检查网路重试`);
-        } else {
-          data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1])
-          if (data.ret === 0) {
-            console.log($.signhb_source === '5' ? `开启宝箱 获得${data.sendxd}喜豆` : `开启宝箱 获得${data.sendhb}红包`);
-          } else {
-            console.log(JSON.stringify(data));
+      $.get(taskUrl(functionId, body), async (err, resp, data) => {
+          try {
+              if (err) {
+                  console.log(JSON.stringify(err));
+                  console.log(`${$.name} bxdraw API请求失败，请检查网路重试`);
+              } else {
+                  data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1])
+                  if (data.ret === 0) {
+                      console.log($.signhb_source === '5' ? `开启宝箱 获得${data.sendxd}喜豆` : `开启宝箱 获得${data.sendhb}红包`);
+                  } else {
+                      console.log(JSON.stringify(data));
           }
         }
       } catch (e) {

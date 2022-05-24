@@ -1657,7 +1657,10 @@ let tuanActiveId = ``, hasSend = false;
 const jxOpenUrl = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://wqsd.jd.com/pingou/dream_factory/index.html%22%20%7D`;
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
 const inviteCodes = [
-    ''
+    'AXDgNYKNLs51h24hm7ZK-w==@2pMYXE95BIkCIGcO6UzTpQ==@DgHnSIl_Xks49TJjxzo7nw==@UO68abNzUTGatLzR4Z4RTg==@xJctChTp3ru2blH_WwFopg==@W2y011egxw55xNDYP8Xpww==@NRjbnfYENRVL9QSnLZZNrA==@dmgVOhr4JdUp1CG78ohkWw==@6nURqZ5tze71d9TbZGQg3Q==',
+    'AXDgNYKNLs51h24hm7ZK-w==@2pMYXE95BIkCIGcO6UzTpQ==@DgHnSIl_Xks49TJjxzo7nw==@UO68abNzUTGatLzR4Z4RTg==@xJctChTp3ru2blH_WwFopg==@W2y011egxw55xNDYP8Xpww==@NRjbnfYENRVL9QSnLZZNrA==@dmgVOhr4JdUp1CG78ohkWw==@6nURqZ5tze71d9TbZGQg3Q==',
+    'AXDgNYKNLs51h24hm7ZK-w==@2pMYXE95BIkCIGcO6UzTpQ==@DgHnSIl_Xks49TJjxzo7nw==@UO68abNzUTGatLzR4Z4RTg==@xJctChTp3ru2blH_WwFopg==@W2y011egxw55xNDYP8Xpww==@NRjbnfYENRVL9QSnLZZNrA==@dmgVOhr4JdUp1CG78ohkWw==@6nURqZ5tze71d9TbZGQg3Q==',
+    'AXDgNYKNLs51h24hm7ZK-w==@2pMYXE95BIkCIGcO6UzTpQ==@DgHnSIl_Xks49TJjxzo7nw==@UO68abNzUTGatLzR4Z4RTg==@xJctChTp3ru2blH_WwFopg==@W2y011egxw55xNDYP8Xpww==@NRjbnfYENRVL9QSnLZZNrA==@dmgVOhr4JdUp1CG78ohkWw==@6nURqZ5tze71d9TbZGQg3Q==',
 ];
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 $.tuanIds = [];
@@ -1816,7 +1819,6 @@ function getActiveId(url = 'https://wqsd.jd.com/pingou/dream_factory/index.html'
         })
     })
 }
-
 // 收取发电机的电力
 function collectElectricity(facId = $.factoryId, help = false, master) {
     return new Promise(async resolve => {
@@ -2023,7 +2025,6 @@ function QueryHireReward() {
         })
     })
 }
-
 // 收取招工/劳模电力
 function hireAward(date, type = 0) {
     return new Promise(async resolve => {
@@ -2053,7 +2054,6 @@ function hireAward(date, type = 0) {
         })
     })
 }
-
 async function helpFriends() {
     let Hours = new Date(new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000 + 8 * 60 * 60 * 1000).getHours();
     if (Hours < 6) {
@@ -2084,7 +2084,6 @@ async function helpFriends() {
         $.log(`\n今日助力好友机会已耗尽\n`);
     }
 }
-
 // 帮助用户,此处UA不可更换,否则助力功能会失效
 function assistFriend(sharepin) {
     return new Promise(async resolve => {
@@ -2126,7 +2125,6 @@ function assistFriend(sharepin) {
         })
     })
 }
-
 //查询助力招工情况
 function QueryFriendList() {
     return new Promise(async resolve => {
@@ -2160,7 +2158,6 @@ function QueryFriendList() {
         })
     })
 }
-
 // 任务领奖
 function completeTask(taskId, taskName) {
     return new Promise(async resolve => {
@@ -2319,7 +2316,6 @@ function userInfo() {
         })
     })
 }
-
 //查询当前生产的商品名称
 function GetCommodityDetails() {
     return new Promise(async resolve => {
@@ -2348,7 +2344,6 @@ function GetCommodityDetails() {
         })
     })
 }
-
 // 查询已完成商品
 function GetShelvesList(pageNo = 1) {
     return new Promise(async resolve => {
@@ -2381,7 +2376,6 @@ function GetShelvesList(pageNo = 1) {
         })
     })
 }
-
 //领取红包
 function DrawProductionStagePrize() {
     return new Promise(async resolve => {
@@ -2410,7 +2404,6 @@ function DrawProductionStagePrize() {
         })
     })
 }
-
 async function PickUp(encryptPin = $.encryptPin, help = false) {
     $.pickUpMyselfComponent = true;
     const GetUserComponentRes = await GetUserComponent(encryptPin, 1500);
@@ -2450,7 +2443,6 @@ async function PickUp(encryptPin = $.encryptPin, help = false) {
         }
     }
 }
-
 function GetUserComponent(pin = $.encryptPin, timeout = 0) {
     return new Promise(resolve => {
         setTimeout(() => {
@@ -2478,7 +2470,6 @@ function GetUserComponent(pin = $.encryptPin, timeout = 0) {
         }, timeout)
     })
 }
-
 //收取地下随机零件电力API
 
 function PickUpComponent(index, encryptPin) {
@@ -2517,7 +2508,6 @@ function PickUpComponent(index, encryptPin) {
         })
     })
 }
-
 //偷好友的电力
 async function stealFriend() {
     // if (!$.pickUpMyselfComponent) {
@@ -2537,7 +2527,6 @@ async function stealFriend() {
         // if ($.stealFactoryId) await collectElectricity($.stealFactoryId,true, pin);
     }
 }
-
 function getFriendList(sort = 0) {
     return new Promise(async resolve => {
         $.get(taskurl('friend/QueryFactoryManagerList', `sort=${sort}`, `_time,sort,zone`), async (err, resp, data) => {
@@ -2574,7 +2563,6 @@ function getFriendList(sort = 0) {
         })
     })
 }
-
 function getFactoryIdByPin(pin) {
     return new Promise((resolve, reject) => {
         // const url = `/dreamfactory/userinfo/GetUserInfoByPin?zone=dream_factory&pin=${pin}&sceneval=2`;
@@ -2605,7 +2593,6 @@ function getFactoryIdByPin(pin) {
         })
     })
 }
-
 async function tuanActivity() {
     const tuanConfig = await QueryActiveConfig();
     if (tuanConfig && tuanConfig.ret === 0) {
@@ -2651,14 +2638,13 @@ async function tuanActivity() {
         }
     }
 }
-
 async function joinLeaderTuan() {
-    let res = await updateTuanIdsCDN('')
+    let res = await updateTuanIdsCDN('https://raw.githubusercontent.com/Aaron-lv/updateTeam/master/shareCodes/jd_updateFactoryTuanId.json')
     if (!res) {
-        $.http.get({url: ''}).then((resp) => {
+        $.http.get({url: 'https://purge.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jd_updateFactoryTuanId.json'}).then((resp) => {
         }).catch((e) => $.log('刷新CDN异常', e));
         await $.wait(1000)
-        res = await updateTuanIdsCDN('');
+        res = await updateTuanIdsCDN('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jd_updateFactoryTuanId.json');
     }
     $.authorTuanIds = [...(res && res.tuanIds || [])]
     if ($.authorTuanIds && $.authorTuanIds.length) {
@@ -2671,7 +2657,6 @@ async function joinLeaderTuan() {
         }
     }
 }
-
 //可获取开团后的团ID，如果团ID为空并且surplusOpenTuanNum>0，则可继续开团
 //如果团ID不为空，则查询QueryTuan()
 function QueryActiveConfig() {
@@ -2703,7 +2688,6 @@ function QueryActiveConfig() {
         })
     })
 }
-
 function QueryTuan(activeId, tuanId) {
     return new Promise((resolve) => {
         const body = `activeId=${escape(activeId)}&tuanId=${escape(tuanId)}`;
@@ -2731,7 +2715,6 @@ function QueryTuan(activeId, tuanId) {
         })
     })
 }
-
 //开团API
 function CreateTuan() {
     return new Promise((resolve) => {
@@ -2799,7 +2782,6 @@ function JoinTuan(tuanId, stk = '_time,activeId,tuanId') {
         })
     })
 }
-
 //查询所有的团情况(自己开团以及参加别人的团)
 function QueryAllTuan() {
     return new Promise((resolve) => {
@@ -2846,7 +2828,6 @@ function QueryAllTuan() {
         })
     })
 }
-
 //开团人的领取奖励API
 function tuanAward(activeId, tuanId, isTuanLeader = true) {
     return new Promise((resolve) => {
@@ -2981,7 +2962,6 @@ async function exchangeProNotify() {
         }
     }
 }
-
 async function showMsg() {
     return new Promise(async resolve => {
         message += `【收取自己零件】${$.pickUpMyselfComponent ? `获得${$.pickEle}电力` : `今日已达上限`}\n`;
@@ -2995,11 +2975,10 @@ async function showMsg() {
         resolve()
     })
 }
-
 function readShareCode() {
     console.log(`开始`)
     return new Promise(async resolve => {
-        $.get({url: ``, timeout: 10000}, (err, resp, data) => {
+        $.get({url: `http://transfer.nz.lu/jxfactory`, timeout: 10000}, (err, resp, data) => {
             try {
                 if (err) {
                     console.log(JSON.stringify(err))
@@ -3020,7 +2999,6 @@ function readShareCode() {
         resolve()
     })
 }
-
 //格式化助力码
 function shareCodesFormat() {
     return new Promise(async resolve => {
@@ -3041,7 +3019,6 @@ function shareCodesFormat() {
         resolve();
     })
 }
-
 function requireConfig() {
     return new Promise(async resolve => {
         // tuanActiveId = $.isNode() ? (process.env.TUAN_ACTIVEID || tuanActiveId) : ($.getdata('tuanActiveId') || tuanActiveId);
@@ -3086,7 +3063,6 @@ function requireConfig() {
         resolve()
     })
 }
-
 function TotalBean() {
     return new Promise(async resolve => {
         const options = {
@@ -3131,7 +3107,6 @@ function TotalBean() {
         })
     })
 }
-
 function safeGet(data) {
     try {
         if (typeof JSON.parse(data) == "object") {
@@ -3143,7 +3118,6 @@ function safeGet(data) {
         return false;
     }
 }
-
 function taskTuanUrl(functionId, body = '', stk) {
     let url = `https://m.jingxi.com/dreamfactory/tuan/${functionId}?${body}&_time=${Date.now()}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&_ste=1`
     url += `&h5st=${decrypt(Date.now(), stk || '', '', url)}`
@@ -3185,7 +3159,6 @@ function taskurl(functionId, body = '', stk) {
         }
     }
 }
-
 function newtasksysUrl(functionId, taskId, stk) {
     let url = `${JD_API_HOST}/newtasksys/newtasksys_front/${functionId}?source=dreamfactory&bizCode=dream_factory&sceneval=2&g_login_type=1&_time=${Date.now()}&_=${Date.now() + 2}&_ste=1`;
     if (taskId) {
@@ -3210,7 +3183,6 @@ function newtasksysUrl(functionId, taskId, stk) {
         }
     }
 }
-
 /*
 修改时间戳转换函数，京喜工厂原版修改
  */
@@ -3265,7 +3237,7 @@ async function requestAlgo() {
             "expandParams": ""
         })
     }
-    new Promise(async resolve => {
+    return new Promise(async resolve => {
         $.post(options, (err, resp, data) => {
             try {
                 if (err) {
@@ -3299,7 +3271,6 @@ async function requestAlgo() {
         })
     })
 }
-
 function decrypt(time, stk, type, url) {
     stk = stk || (url ? getUrlData(url, '_stk') : '')
     if (stk) {
@@ -3351,7 +3322,6 @@ function getUrlData(url, name) {
         return ''
     }
 }
-
 /**
  * 模拟生成 fingerprint
  * @returns {string}
@@ -3364,7 +3334,6 @@ function generateFp() {
         i += e[Math.random() * e.length | 0];
     return (i + Date.now()).slice(0, 16)
 }
-
 function jsonParse(str) {
     if (typeof str == "string") {
         try {
@@ -3376,7 +3345,6 @@ function jsonParse(str) {
         }
     }
 }
-
 // prettier-ignore
 function Env(t, e) {
     "undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0);

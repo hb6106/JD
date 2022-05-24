@@ -96,7 +96,6 @@ const JD_API_HOST = `https://api.m.jd.com/client.action`;
 })()
     .catch((e) => $.logErr(e))
     .finally(() => $.done())
-
 //获取活动信息
 
 

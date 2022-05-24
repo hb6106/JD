@@ -92,7 +92,6 @@ async function domain() {
         console.log('脚本默认不兑换豆子，如需兑换请设置环境变量exjxbeans为true')
     }
 }
-
 function queryexpirebeans() {
     return new Promise(async resolve => {
         const options = {
@@ -126,7 +125,6 @@ function queryexpirebeans() {
         })
     })
 }
-
 function exchangejxbeans(o) {
     return new Promise(async resolve => {
         const options = {

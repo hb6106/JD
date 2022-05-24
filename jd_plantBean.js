@@ -1,5 +1,5 @@
 /*
-种豆得豆 脚本更新地址：https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_plantBean.js
+种豆得豆 脚本更新地址：jd_plantBean.js
 更新时间：2021-08-20
 活动入口：京东APP我的-更多工具-种豆得豆
 已支持IOS京东多账号,云端多京东账号
@@ -8,24 +8,22 @@
 互助码shareCode请先手动运行脚本查看打印可看到
 每个京东账号每天只能帮助3个人。多出的助力码将会助力失败。
 
-// zero205：已添加自己账号内部互助，有剩余助力次数再帮我助力
-
 =====================================Quantumult X=================================
 [task_local]
-1 7-21/2 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_plantBean.js, tag=种豆得豆, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdzd.png, enabled=true
+1 7-21/2 * * * https://raw.githubusercontent.com/shufflewzc/faker2/main/jd_plantBean.js, tag=种豆得豆, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdzd.png, enabled=true
 
 =====================================Loon================================
 [Script]
-cron "1 7-21/2 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_plantBean.js,tag=京东种豆得豆
+cron "1 7-21/2 * * *" script-path=https://raw.githubusercontent.com/shufflewzc/faker2/main/jd_plantBean.js,tag=京东种豆得豆
 
 ======================================Surge==========================
-京东种豆得豆 = type=cron,cronexp="1 7-21/2 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_plantBean.js
+京东种豆得豆 = type=cron,cronexp="1 7-21/2 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/shufflewzc/faker2/main/jd_plantBean.js
 
 ====================================小火箭=============================
-京东种豆得豆 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_plantBean.js, cronexpr="1 7-21/2 * * *", timeout=3600, enable=true
+京东种豆得豆 = type=cron,script-path=https://raw.githubusercontent.com/shufflewzc/faker2/main/jd_plantBean.js, cronexpr="1 7-21/2 * * *", timeout=3600, enable=true
 
 */
-const $ = new Env('京东种豆得豆_内部互助');
+const $ = new Env('种豆得豆');
 //Node.js用户请在jdCookie.js处填写京东ck;
 //ios等软件用户直接用NobyDa的jd cookie
 let jdNotify = true;//是否开启静默运行。默认true开启
@@ -43,45 +41,45 @@ let roundList = [];
 let awardState = '';//上期活动的京豆是否收取
 let randomCount = $.isNode() ? 20 : 5;
 let num;
+let llerror = false;
 $.newShareCode = [];
-!(async () => {  
-  await requireConfig();
-  if (!cookiesArr[0]) {
-    $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
-    return;
-  }
-  for (let i = 0; i < cookiesArr.length; i++) {
-    if (cookiesArr[i]) {
-      cookie = cookiesArr[i];
-      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
+let NowHour = new Date().getHours();
+let lnrun = 0;
+!(async () => {
+    await requireConfig();
+    if (!cookiesArr[0]) {
+        $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
+        return;
+    }
+    for (let i = 0; i < cookiesArr.length; i++) {
+        if (cookiesArr[i]) {
+            cookie = cookiesArr[i];
+            $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = i + 1;
       $.isLogin = true;
       $.nickName = '';
       await TotalBean();
       console.log(`\n开始【京东账号${$.index}】${$.nickName || $.UserName}\n`);
       if (!$.isLogin) {
-        $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
+          $.msg($.name, `【提示】cookie已失效`, `京东账号${$.index} ${$.nickName || $.UserName}\n请重新登录获取\nhttps://bean.m.jd.com/bean/signIndex.action`, {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
 
-        if ($.isNode()) {
-          await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
-        }
-        continue
+          if ($.isNode()) {
+              await notify.sendNotify(`${$.name}cookie已失效 - ${$.UserName}`, `京东账号${$.index} ${$.UserName}\n请重新登录获取cookie`);
+          }
+          continue
       }
-      message = '';
-      subTitle = '';
-      option = {};
-      await jdPlantBean();
-      await showMsg();
-    }
-  }
-  for (let j = 0; j < cookiesArr.length; j++) {
-    if (cookiesArr[j]) {
-      cookie = cookiesArr[j];
-      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
-      $.index = j + 1;
-      //await shareCodesFormat();
-      await doHelp()
-    }
+            message = '';
+            subTitle = '';
+            option = {};
+            lnrun++;
+            await jdPlantBean();
+            if (lnrun == 3) {
+                console.log(`\n【访问接口次数达到3次，休息一分钟.....】\n`);
+                await $.wait(60 * 1000);
+                lnrun = 0;
+            }
+            //await showMsg();
+        }
   }
   if ($.isNode() && allMessage) {
     await notify.sendNotify(`${$.name}`, `${allMessage}`)
@@ -94,41 +92,47 @@ $.newShareCode = [];
 
 async function jdPlantBean() {
   try {
-    console.log(`获取任务及基本信息`)
-    await plantBeanIndex();
-    if ($.plantBeanIndexResult.errorCode === 'PB101') {
-      console.log(`\n活动太火爆了，还是去买买买吧！\n`)
-      return
-    }
-    for (let i = 0; i < $.plantBeanIndexResult.data.roundList.length; i++) {
-      if ($.plantBeanIndexResult.data.roundList[i].roundState === "2") {
-        num = i
-        break
+      console.log(`获取任务及基本信息`)
+      await plantBeanIndex();
+      if (llerror)
+          return;
+      for (let i = 0; i < $.plantBeanIndexResult.data.roundList.length; i++) {
+          if ($.plantBeanIndexResult.data.roundList[i].roundState === "2") {
+              num = i
+              break
+          }
       }
-    }
-    // console.log(plantBeanIndexResult.data.taskList);
-    if ($.plantBeanIndexResult && $.plantBeanIndexResult.code === '0' && $.plantBeanIndexResult.data) {
-      const shareUrl = $.plantBeanIndexResult.data.jwordShareInfo.shareUrl
-      $.myPlantUuid = getParam(shareUrl, 'plantUuid')
+      // console.log(plantBeanIndexResult.data.taskList);
+      if ($.plantBeanIndexResult && $.plantBeanIndexResult.code === '0' && $.plantBeanIndexResult.data) {
+          const shareUrl = $.plantBeanIndexResult.data.jwordShareInfo.shareUrl
+          $.myPlantUuid = getParam(shareUrl, 'plantUuid')
       console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.myPlantUuid}\n`);
-      jdPlantBeanShareArr.push($.myPlantUuid)
+          jdPlantBeanShareArr.push($.myPlantUuid)
 
-      roundList = $.plantBeanIndexResult.data.roundList;
-      currentRoundId = roundList[num].roundId;//本期的roundId
-      lastRoundId = roundList[num - 1].roundId;//上期的roundId
-      awardState = roundList[num - 1].awardState;
-      $.taskList = $.plantBeanIndexResult.data.taskList;
-      subTitle = `【京东昵称】${$.plantBeanIndexResult.data.plantUserInfo.plantNickName}`;
-      message += `【上期时间】${roundList[num - 1].dateDesc.replace('上期 ', '')}\n`;
-      message += `【上期成长值】${roundList[num - 1].growth}\n`;
-      await receiveNutrients();//定时领取营养液
-      await doTask();//做日常任务
-      // await doEgg();
-      await stealFriendWater();
-      await doCultureBean();
-      await doGetReward();
-      await showTaskProcess();
-      await plantShareSupportList();
+          roundList = $.plantBeanIndexResult.data.roundList;
+          currentRoundId = roundList[num].roundId;//本期的roundId
+          lastRoundId = roundList[num - 1].roundId;//上期的roundId
+          awardState = roundList[num - 1].awardState;
+          $.taskList = $.plantBeanIndexResult.data.taskList;
+          subTitle = `【京东昵称】${$.plantBeanIndexResult.data.plantUserInfo.plantNickName}`;
+          message += `【上期时间】${roundList[num - 1].dateDesc.replace('上期 ', '')}\n`;
+          message += `【上期成长值】${roundList[num - 1].growth}\n`;
+          await $.wait(1000);
+          await receiveNutrients();//定时领取营养液
+          await $.wait(2000);
+          await doTask();//做日常任务
+          await $.wait(5000);
+          // await doEgg();
+          await stealFriendWater();
+          await $.wait(2000);
+          await doCultureBean();
+          await $.wait(1000);
+          await doGetReward();
+          await $.wait(1000);
+          await showTaskProcess();
+          await $.wait(1000);
+          await plantShareSupportList();
+          await $.wait(1000);
     } else {
       console.log(`种豆得豆-初始失败:  ${JSON.stringify($.plantBeanIndexResult)}`);
     }
@@ -170,17 +174,19 @@ async function doGetReward() {
   message += `【本期成长值】${roundList[num].growth}\n`;
 }
 async function doCultureBean() {
-  await plantBeanIndex();
-  if ($.plantBeanIndexResult && $.plantBeanIndexResult.code === '0') {
-    const plantBeanRound = $.plantBeanIndexResult.data.roundList[num]
-    if (plantBeanRound.roundState === '2') {
-      //收取营养液
-      if (plantBeanRound.bubbleInfos && plantBeanRound.bubbleInfos.length) console.log(`开始收取营养液`)
-      for (let bubbleInfo of plantBeanRound.bubbleInfos) {
-        console.log(`收取-${bubbleInfo.name}-的营养液`)
-        await cultureBean(plantBeanRound.roundId, bubbleInfo.nutrientsType)
-        console.log(`收取营养液结果:${JSON.stringify($.cultureBeanRes)}`)
-      }
+    await plantBeanIndex();
+    if (llerror)
+        return;
+    if ($.plantBeanIndexResult && $.plantBeanIndexResult.code === '0') {
+        const plantBeanRound = $.plantBeanIndexResult.data.roundList[num]
+        if (plantBeanRound.roundState === '2') {
+            //收取营养液
+            if (plantBeanRound.bubbleInfos && plantBeanRound.bubbleInfos.length) console.log(`开始收取营养液`)
+            for (let bubbleInfo of plantBeanRound.bubbleInfos) {
+                console.log(`收取-${bubbleInfo.name}-的营养液`)
+                await cultureBean(plantBeanRound.roundId, bubbleInfo.nutrientsType)
+                console.log(`收取营养液结果:${JSON.stringify($.cultureBeanRes)}`)
+            }
     }
   } else {
     console.log(`plantBeanIndexResult:${JSON.stringify($.plantBeanIndexResult)}`)
@@ -257,29 +263,36 @@ async function doTask() {
       if (item.dailyTimes === 1 && item.taskType !== 8) {
         console.log(`\n开始做 ${item.taskName}任务`);
         // $.receiveNutrientsTaskRes = await receiveNutrientsTask(item.taskType);
-        await receiveNutrientsTask(item.taskType);
-        console.log(`做 ${item.taskName}任务结果:${JSON.stringify($.receiveNutrientsTaskRes)}\n`);
+          await receiveNutrientsTask(item.taskType);
+          await $.wait(3000);
+          console.log(`做 ${item.taskName}任务结果:${JSON.stringify($.receiveNutrientsTaskRes)}\n`);
       }
       if (item.taskType === 3) {
-        //浏览店铺
-        console.log(`开始做 ${item.taskName}任务`);
-        let unFinishedShopNum = item.totalNum - item.gainedNum;
-        if (unFinishedShopNum === 0) {
-          continue
-        }
-        await shopTaskList();
-        const { data } = $.shopTaskListRes;
-        let goodShopListARR = [], moreShopListARR = [], shopList = [];
-        const { goodShopList, moreShopList } = data;
-        for (let i of goodShopList) {
-          if (i.taskState === '2') {
-            goodShopListARR.push(i);
+          //浏览店铺
+          console.log(`开始做 ${item.taskName}任务`);
+          let unFinishedShopNum = item.totalNum - item.gainedNum;
+          if (unFinishedShopNum === 0) {
+              continue
           }
-        }
-        for (let j of moreShopList) {
-          if (j.taskState === '2') {
-            moreShopListARR.push(j);
+          await shopTaskList();
+          const {data} = $.shopTaskListRes;
+          let goodShopListARR = [], moreShopListARR = [], shopList = [];
+          if (!data.goodShopList) {
+              data.goodShopList = [];
           }
+          if (!data.moreShopList) {
+              data.moreShopList = [];
+          }
+          const {goodShopList, moreShopList} = data;
+          for (let i of goodShopList) {
+              if (i.taskState === '2') {
+                  goodShopListARR.push(i);
+              }
+          }
+          for (let j of moreShopList) {
+              if (j.taskState === '2') {
+                  moreShopListARR.push(j);
+              }
         }
         shopList = goodShopListARR.concat(moreShopListARR);
         for (let shop of shopList) {
@@ -293,7 +306,7 @@ async function doTask() {
           console.log(`shopRes结果:${JSON.stringify(shopRes)}`);
           if (shopRes && shopRes.code === '0') {
             if (shopRes.data && shopRes.data.nutrState && shopRes.data.nutrState === '1') {
-              unFinishedShopNum--;
+                unFinishedShopNum--;
             }
           }
           if (unFinishedShopNum <= 0) {
@@ -393,52 +406,18 @@ async function doTask() {
 }
 function showTaskProcess() {
   return new Promise(async resolve => {
-    await plantBeanIndex();
-    $.taskList = $.plantBeanIndexResult.data.taskList;
-    if ($.taskList && $.taskList.length > 0) {
-      console.log("     任务   进度");
-      for (let item of $.taskList) {
-        console.log(`[${item["taskName"]}]  ${item["gainedNum"]}/${item["totalNum"]}   ${item["isFinished"]}`);
+      await plantBeanIndex();
+      if (llerror)
+          return;
+      $.taskList = $.plantBeanIndexResult.data.taskList;
+      if ($.taskList && $.taskList.length > 0) {
+          console.log("     任务   进度");
+          for (let item of $.taskList) {
+              console.log(`[${item["taskName"]}]  ${item["gainedNum"]}/${item["totalNum"]}   ${item["isFinished"]}`);
+          }
       }
-    }
-    resolve()
+      resolve()
   })
-}
-//助力好友
-async function doHelp() {
-
-  console.log(`开始账号内互助`);
-  $.newShareCode = [...(jdPlantBeanShareArr || [])]
-  
-  for (let plantUuid of $.newShareCode) {
-    console.log(`${$.UserName}开始助力: ${plantUuid}`);
-    if (!plantUuid) continue;
-    if (plantUuid === $.myPlantUuid) {
-      console.log(`\n跳过自己的plantUuid\n`)
-      continue
-    }
-    await helpShare(plantUuid);
-    if ($.helpResult && $.helpResult.code === '0') {
-      // console.log(`助力好友结果: ${JSON.stringify($.helpResult.data.helpShareRes)}`);
-      if ($.helpResult.data.helpShareRes) {
-        if ($.helpResult.data.helpShareRes.state === '1') {
-          console.log(`助力好友${plantUuid}成功`)
-          console.log(`${$.helpResult.data.helpShareRes.promptText}\n`);
-        } else if ($.helpResult.data.helpShareRes.state === '2') {
-          console.log('您今日助力的机会已耗尽，已不能再帮助好友助力了\n');
-          break;
-        } else if ($.helpResult.data.helpShareRes.state === '3') {
-          console.log('该好友今日已满9人助力/20瓶营养液,明天再来为Ta助力吧\n')
-        } else if ($.helpResult.data.helpShareRes.state === '4') {
-          console.log(`${$.helpResult.data.helpShareRes.promptText}\n`)
-        } else {
-          console.log(`助力其他情况：${JSON.stringify($.helpResult.data.helpShareRes)}`);
-        }
-      }
-    } else {
-      console.log(`助力好友失败: ${JSON.stringify($.helpResult)}`);
-    }
-  }
 }
 function showMsg() {
   $.log(`\n${message}\n`);
@@ -549,47 +528,39 @@ async function helpShare(plantUuid) {
   console.log(`助力结果的code:${$.helpResult && $.helpResult.code}`);
 }
 async function plantBeanIndex() {
-  $.plantBeanIndexResult = await request('plantBeanIndex');//plantBeanIndexBody
-}
-function readShareCode() {
-  return new Promise(async resolve => {
-    $.get({url: `https://api.jdsharecode.xyz/api/bean/${randomCount}`, timeout: 10000}, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            console.log(`随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
-            data = JSON.parse(data);
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-    await $.wait(15000);
-    resolve()
-  })
-}
-//格式化助力码
-function shareCodesFormat() {
-  return new Promise(async resolve => {
-    console.log(`第${$.index}个京东账号的助力码:${$.shareCodesArr[$.index - 1]}`)
-    newShareCodes = [];
-    if ($.shareCodesArr[$.index - 1]) {
-      newShareCodes = $.shareCodesArr[$.index - 1].split('@');
-    } else {
-      // console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
-      const tempIndex = $.index > shareCodes.length ? (shareCodes.length - 1) : ($.index - 1);
-      newShareCodes = shareCodes[tempIndex].split('@');
+    llerror = false;
+    $.plantBeanIndexResult = await request('plantBeanIndex'); //plantBeanIndexBody
+    if ($.plantBeanIndexResult.errorCode === 'PB101') {
+        console.log(`\n活动太火爆了，还是去买买买吧！\n`)
+        llerror = true;
+        return
     }
-    
-    console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify(newShareCodes)}`)
-    resolve();
-  })
+    if ($.plantBeanIndexResult.errorCode) {
+        console.log(`获取任务及基本信息出错，10秒后重试\n`)
+        await $.wait(10000);
+        $.plantBeanIndexResult = await request('plantBeanIndex');
+        if ($.plantBeanIndexResult.errorCode === 'PB101') {
+            console.log(`\n活动太火爆了，还是去买买买吧！\n`)
+            llerror = true;
+            return
+        }
+    }
+    if ($.plantBeanIndexResult.errorCode) {
+        console.log(`获取任务及基本信息出错，30秒后重试\n`)
+        await $.wait(30000);
+        $.plantBeanIndexResult = await request('plantBeanIndex');
+        if ($.plantBeanIndexResult.errorCode === 'PB101') {
+            console.log(`\n活动太火爆了，还是去买买买吧！\n`)
+            llerror = true;
+            return
+        }
+    }
+    if ($.plantBeanIndexResult.errorCode) {
+        console.log(`获取任务及基本信息失败，活动异常，换个时间再试试吧....`)
+        console.log("错误代码;" + $.plantBeanIndexResult.errorCode)
+        llerror = true;
+        return
+    }
 }
 function requireConfig() {
   return new Promise(resolve => {
@@ -619,7 +590,7 @@ function requireConfig() {
       })
     } else {
       if ($.getdata('jd_plantbean_inviter')) $.shareCodesArr = $.getdata('jd_plantbean_inviter').split('\n').filter(item => !!item);
-      console.log(`\nBoxJs设置的${$.name}好友邀请码:${$.getdata('jd_plantbean_inviter') ? $.getdata('jd_plantbean_inviter') : '暂无'}\n`);
+        //console.log(`\nBoxJs设置的${$.name}好友邀请码:${$.getdata('jd_plantbean_inviter') ? $.getdata('jd_plantbean_inviter') : '暂无'}\n`);
     }
     // console.log(`\n种豆得豆助力码::${JSON.stringify($.shareCodesArr)}`);
     //console.log(`您提供了${$.shareCodesArr.length}个账号的种豆得豆助力码\n`);
@@ -633,7 +604,7 @@ function requestGet(function_id, body = {}) {
   body["monitor_source"] = "plant_app_plant_index";
   body["monitor_refer"] = "";
   return new Promise(async resolve => {
-    await $.wait(2000);
+      await $.wait(5000);
     const option = {
       url: `${JD_API_HOST}?functionId=${function_id}&body=${escape(JSON.stringify(body))}&appid=ld`,
       headers: {
@@ -711,17 +682,17 @@ function TotalBean() {
 }
 function request(function_id, body = {}) {
   return new Promise(async resolve => {
-    await $.wait(2000);
-    $.post(taskUrl(function_id, body), (err, resp, data) => {
-      try {
-        if (err) {
-          console.log('\n种豆得豆: API查询请求失败 ‼️‼️')
-          console.log(`function_id:${function_id}`)
-          $.logErr(err);
-        } else {
-          data = JSON.parse(data);
-        }
-      } catch (e) {
+      await $.wait(5000);
+      $.post(taskUrl(function_id, body), (err, resp, data) => {
+          try {
+              if (err) {
+                  console.log('\n种豆得豆: API查询请求失败 ‼️‼️')
+                  console.log(`function_id:${function_id}`)
+                  $.logErr(err);
+              } else {
+                  data = JSON.parse(data);
+              }
+          } catch (e) {
         $.logErr(e, resp);
       } finally {
         resolve(data);

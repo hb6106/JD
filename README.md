@@ -1,2 +1,1 @@
-# JD
-JD scripts
+readme

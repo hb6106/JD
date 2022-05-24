@@ -168,7 +168,6 @@ function indexInfo() {
         })
     })
 }
-
 function doTask(type, id, taskId) {
     if ($.outFlag != 0) return
     return new Promise(async resolve => {
@@ -226,7 +225,6 @@ function doTask(type, id, taskId) {
         })
     })
 }
-
 function extraTaskPrize() {
     if ($.outFlag != 0) return
     return new Promise(async resolve => {
@@ -281,7 +279,6 @@ function extraTaskPrize() {
         })
     })
 }
-
 function getData(url) {
     return new Promise(async resolve => {
         const options = {
@@ -305,7 +302,6 @@ function getData(url) {
         resolve();
     })
 }
-
 /*
  *Progcessed By JSDec in 0.01s
  *JSDec - JSDec.js.org
@@ -559,7 +555,6 @@ function jsonParse(str) {
         }
     }
 }
-
 // prettier-ignore
 function Env(t, e) {
     "undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0);

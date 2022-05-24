@@ -104,6 +104,7 @@ $.shareuuid = "7eaf779f13f64e2cbb2b1a55fd1de09f" //
 //获取活动信息
 
 
+
 //genToken
 function genToken() {
     let config = {
@@ -507,7 +508,6 @@ function draw() {
         })
     })
 }
-
 function taskUrl(url, body) {
     const time = Date.now();
     //  console.log(cookie)
@@ -524,6 +524,7 @@ function taskUrl(url, body) {
         }
     }
 }
+
 
 
 function taskPostUrl(url, body) {
@@ -556,7 +557,6 @@ function jsonParse(str) {
         }
     }
 }
-
 // prettier-ignore
 function Env(t, e) {
     class s {

@@ -1,27 +1,28 @@
 # -*- coding:utf-8 -*-
 #依赖管理-Python3-添加依赖PyExecJS
-#想拿券的cookie环境变量JDJR_COOKIE，格式就是普通的cookie格式（pt_key=xxx;pt_pin=xxx）
-#活动每天早上10点开始截止到这个月28号，建议corn 5 0 10 * * *
-import execjs
-import requests
+# 想拿券的cookie环境变量JDJR_COOKIE，格式就是普通的cookie格式（pt_key=xxx;pt_pin=xxx）
+# 活动每天早上10点开始截止到这个月28号，建议corn 5 0 10 * * *
 import json
-import time
 import os
+import random
 import re
 import sys
-import random
-import string
 import urllib
 from urllib.parse import quote
 
+import execjs
+import requests
 
-#以下部分参考Curtin的脚本：https://github.com/curtinlv/JD-Script
+
+# 以下部分参考Curtin的脚本：https://github.com/curtinlv/JD-Script
 
 
 def randomuserAgent():
-    global uuid,addressid,iosVer,iosV,clientVersion,iPhone,ADID,area,lng,lat
-    
-    uuid=''.join(random.sample(['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9','a','b','c','z'], 40))
+    global uuid, addressid, iosVer, iosV, clientVersion, iPhone, ADID, area, lng, lat
+
+    uuid = ''.join(random.sample(
+        ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+         'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'z'], 40))
     addressid = ''.join(random.sample('1234567898647', 10))
     iosVer = ''.join(random.sample(["15.1.1","14.5.1", "14.4", "14.3", "14.2", "14.1", "14.0.1"], 1))
     iosV = iosVer.replace('.', '_')

@@ -14,7 +14,7 @@ const querystring = require('querystring');
 const exec = require('child_process').exec;
 const $ = new Env();
 const timeout = 15000; //超时时间(单位毫秒)
-console.log("加载sendNotify，当前版本: 20220306");
+console.log("加载sendNotify，当前版本: 20220523");
 // =======================================go-cqhttp通知设置区域===========================================
 //gobot_url 填写请求地址http://127.0.0.1/send_private_msg
 //gobot_token 填写在go-cqhttp文件设置的访问密钥
@@ -132,7 +132,18 @@ const {
     getEnvByPtPin
 } = require('./ql');
 const fs = require('fs');
-let strCKFile = '/ql/scripts/CKName_cache.json';
+let isnewql = fs.existsSync('/ql/data/config/auth.json');
+let strCKFile = "";
+let strUidFile = "";
+if (isnewql) {
+    strCKFile = '/ql/data/scripts/CKName_cache.json';
+    strUidFile = '/ql/data/scripts/CK_WxPusherUid.json';
+} else {
+    strCKFile = '/ql/scripts/CKName_cache.json';
+    strUidFile = '/ql/scripts/CK_WxPusherUid.json';
+}
+
+
 let Fileexists = fs.existsSync(strCKFile);
 let TempCK = [];
 if (Fileexists) {
@@ -143,7 +154,7 @@ if (Fileexists) {
         TempCK = JSON.parse(TempCK);
     }
 }
-let strUidFile = '/ql/scripts/CK_WxPusherUid.json';
+
 let UidFileexists = fs.existsSync(strUidFile);
 let TempCKUid = [];
 if (UidFileexists) {
@@ -235,6 +246,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
         var Use_WxPusher = true;
         var strtext = text;
         var strdesp = desp;
+        var titleIndex = -1;
         if (process.env.NOTIFY_NOCKFALSE) {
             Notify_NoCKFalse = process.env.NOTIFY_NOCKFALSE;
         }
@@ -392,20 +404,12 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                     return;
             }
         }
+
         if (strtext.indexOf("cookie已失效") != -1 || strdesp.indexOf("重新登录获取") != -1 || strtext == "Ninja 运行通知") {
             if (Notify_NoCKFalse == "true" && text != "Ninja 运行通知") {
                 console.log(`检测到NOTIFY_NOCKFALSE变量为true,不发送ck失效通知...`);
                 return;
             }
-        }
-
-        //检查黑名单屏蔽通知
-        const notifySkipList = process.env.NOTIFY_SKIP_LIST ? process.env.NOTIFY_SKIP_LIST.split('&') : [];
-        let titleIndex = notifySkipList.findIndex((item) => item === text);
-
-        if (titleIndex !== -1) {
-            console.log(`${text} 在推送黑名单中，已跳过推送`);
-            return;
         }
 
         if (text.indexOf("已可领取") != -1) {
@@ -428,6 +432,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
         if (text.indexOf("任务") != -1 && (text.indexOf("新增") != -1 || text.indexOf("删除") != -1)) {
             strTitle = "脚本任务更新";
         }
+
         if (strTitle) {
             const notifyRemindList = process.env.NOTIFY_NOREMIND ? process.env.NOTIFY_NOREMIND.split('&') : [];
             titleIndex = notifyRemindList.findIndex((item) => item === strTitle);
@@ -440,7 +445,6 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
         } else {
             strTitle = text;
         }
-
         if (Notify_NoLoginSuccess == "true") {
             if (desp.indexOf("登陆成功") != -1) {
                 console.log(`登陆成功不推送`);
@@ -453,11 +457,20 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
             var strPtPin = await GetPtPin(text);
             var strdecPtPin = decodeURIComponent(strPtPin);
             if (strPtPin) {
-                await sendNotifybyWxPucher("汪汪乐园领取通知", `【京东账号】${strdecPtPin}\n当前等级: 30\n已自动领取最高等级奖励\n请前往京东极速版APP查看使用优惠券\n活动入口：京东极速版APP->我的->优惠券->京券`, strdecPtPin);
+                await sendNotifybyWxPucher("汪汪乐园领取通知", `【京东账号】${strdecPtPin}\n当前等级: 30\n请自行去解锁新场景,奖励领取方式如下:\n极速版APP->我的->汪汪乐园,点击左上角头像，点击中间靠左的现金奖励图标，弹出历史奖励中点击领取.`, strdecPtPin);
             }
         }
 
         console.log("通知标题: " + strTitle);
+
+        //检查黑名单屏蔽通知
+        const notifySkipList = process.env.NOTIFY_SKIP_LIST ? process.env.NOTIFY_SKIP_LIST.split('&') : [];
+        titleIndex = notifySkipList.findIndex((item) => item === strTitle);
+
+        if (titleIndex !== -1) {
+            console.log(`${strTitle} 在推送黑名单中，已跳过推送`);
+            return;
+        }
 
         //检查脚本名称是否需要通知到Group2,Group2读取原环境配置的变量名后加2的值.例如: QYWX_AM2
         const notifyGroup2List = process.env.NOTIFY_GROUP2_LIST ? process.env.NOTIFY_GROUP2_LIST.split('&') : [];
@@ -1242,7 +1255,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
             }
             break;
 
-		case 7:
+            case 7:
             //==========================第七套环境变量赋值=========================
 
             if (process.env.GOBOT_URL7 && Use_gobotNotify) {
@@ -1442,7 +1455,13 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                             $.nickName = $.nickName.replace(new RegExp(`[*]`, 'gm'), "[*]");
                             text = text.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), $.Remark);
                             if (text == "京东资产变动" || text == "京东资产变动#2" || text == "京东资产变动#3" || text == "京东资产变动#4") {
-                                var Tempinfo = getQLinfo(cookie, envs[i].created, envs[i].timestamp, envs[i].remarks);
+                                var Tempinfo = "";
+                                if (envs[i].created)
+                                    Tempinfo = getQLinfo(cookie, envs[i].created, envs[i].timestamp, envs[i].remarks);
+                                else if (envs[i].updatedAt)
+                                    Tempinfo = getQLinfo(cookie, envs[i].createdAt, envs[i].updatedAt, envs[i].remarks);
+                                else
+                                    Tempinfo = getQLinfo(cookie, envs[i].createdAt, envs[i].timestamp, envs[i].remarks);
                                 if (Tempinfo) {
                                     $.Remark += Tempinfo;
                                 }
@@ -1600,7 +1619,7 @@ function getQLinfo(strCK, intcreated, strTimestamp, strRemark) {
                     if (TempRemarkList[j]) {
                         if (TempRemarkList[j].length == 13) {
                             DateTimestamp = new Date(parseInt(TempRemarkList[j]));
-                            //console.log(strPtPin + ": 获取登录时间成功:" + GetDateTime(DateTimestamp));
+                            //console.log(strPtPin + ": 获取登录时间成功:" + GetDateTime(DateTimestamp));                            
                             break;
                         }
                     }
@@ -1696,7 +1715,14 @@ async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n\n本通知 B
                             //额外处理1，nickName包含星号
                             $.nickName = $.nickName.replace(new RegExp(`[*]`, 'gm'), "[*]");
 
-                            var Tempinfo = getQLinfo(cookie, tempEnv.created, tempEnv.timestamp, tempEnv.remarks);
+                            var Tempinfo = "";
+                            if (tempEnv.created)
+                                Tempinfo = getQLinfo(cookie, tempEnv.created, tempEnv.timestamp, tempEnv.remarks);
+                            else if (tempEnv.updatedAt)
+                                Tempinfo = getQLinfo(cookie, tempEnv.createdAt, tempEnv.updatedAt, tempEnv.remarks);
+                            else
+                                Tempinfo = getQLinfo(cookie, tempEnv.createdAt, tempEnv.timestamp, tempEnv.remarks);
+
                             if (Tempinfo) {
                                 Tempinfo = $.nickName + Tempinfo;
                                 desp = desp.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), Tempinfo);

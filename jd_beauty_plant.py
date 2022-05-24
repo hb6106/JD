@@ -59,15 +59,15 @@ requests.packages.urllib3.disable_warnings()
 today = datetime.datetime.now().strftime('%Y-%m-%d')
 tomorrow = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
 
-nowtime = datetime.datetime.now ().strftime ('%Y-%m-%d %H:%M:%S.%f8')
+nowtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f8')
 
 time1 = '21:00:00.00000000'
 time2 = '23:00:00.00000000'
 
-flag_time1 = '{} {}'.format (today, time1)
-flag_time2 = '{} {}'.format (today, time2)
+flag_time1 = '{} {}'.format(today, time1)
+flag_time2 = '{} {}'.format(today, time2)
 
-pwd = os.path.dirname (os.path.abspath (__file__)) + os.sep
+pwd = os.path.dirname(os.path.abspath(__file__)) + os.sep
 path = pwd + "env.sh"
 
 sid = ''.join (random.sample ('123456789abcdef123456789abcdef123456789abcdef123456789abcdef', 32))

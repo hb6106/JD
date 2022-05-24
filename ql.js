@@ -2,33 +2,40 @@
 
 const got = require('got');
 require('dotenv').config();
-const { readFile } = require('fs/promises');
+const {readFile} = require('fs/promises');
 const path = require('path');
 
 const qlDir = '/ql';
-const authFile = path.join(qlDir, 'config/auth.json');
+const fs = require('fs');
+let Fileexists = fs.existsSync('/ql/data/config/auth.json');
+let authFile = "";
+if (Fileexists)
+    authFile = "/ql/data/config/auth.json"
+else
+    authFile = "/ql/config/auth.json"
+//const authFile = path.join(qlDir, 'config/auth.json');
 
 const api = got.extend({
-  prefixUrl: 'http://127.0.0.1:5600',
-  retry: { limit: 0 },
+    prefixUrl: 'http://127.0.0.1:5600',
+    retry: {limit: 0},
 });
 
 async function getToken() {
-  const authConfig = JSON.parse(await readFile(authFile));
-  return authConfig.token;
+    const authConfig = JSON.parse(await readFile(authFile));
+    return authConfig.token;
 }
 
 module.exports.getEnvs = async () => {
-  const token = await getToken();
-  const body = await api({
-    url: 'api/envs',
-    searchParams: {
-      searchValue: 'JD_COOKIE',
-      t: Date.now(),
-    },
-    headers: {
-      Accept: 'application/json',
-      authorization: `Bearer ${token}`,
+    const token = await getToken();
+    const body = await api({
+        url: 'api/envs',
+        searchParams: {
+            searchValue: 'JD_COOKIE',
+            t: Date.now(),
+        },
+        headers: {
+            Accept: 'application/json',
+            authorization: `Bearer ${token}`,
     },
   }).json();
   return body.data;

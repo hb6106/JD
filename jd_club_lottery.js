@@ -151,7 +151,6 @@ async function clubLottery() {
         $.logErr(e)
     }
 }
-
 async function doTasks() {
     const browseTaskRes = await getTask('browseTask');
     if (browseTaskRes.success) {
@@ -192,7 +191,6 @@ async function doTasks() {
         }
     }
 }
-
 async function shaking() {
     for (let i = 0; i < new Array($.leftShakingTimes).fill('').length; i++) {
         console.log(`开始 【京东会员】 摇奖`)
@@ -227,7 +225,6 @@ async function shaking() {
     }
     if ($.prizeBeanCount > 0) message += `摇京豆：获得${$.prizeBeanCount}京豆`;
 }
-
 function showMsg() {
     return new Promise(resolve => {
         if (message) {
@@ -236,7 +233,6 @@ function showMsg() {
         resolve();
     })
 }
-
 //====================API接口=================
 //查询剩余摇奖次数API
 function vvipclub_shaking_info() {
@@ -274,7 +270,6 @@ function vvipclub_shaking_info() {
         })
     })
 }
-
 //京东会员摇奖API
 function vvipclub_shaking_lottery() {
     return new Promise(resolve => {
@@ -307,7 +302,6 @@ function vvipclub_shaking_lottery() {
         })
     })
 }
-
 //领取京东会员本摇一摇一次免费的次数
 function vvipclub_receive_lottery_times() {
     return new Promise(resolve => {
@@ -340,7 +334,6 @@ function vvipclub_receive_lottery_times() {
         })
     })
 }
-
 //查询多少次机会
 function getFreeTimes() {
     return new Promise(resolve => {
@@ -365,7 +358,6 @@ function getFreeTimes() {
         })
     })
 }
-
 function getTask(info) {
     return new Promise(resolve => {
         $.get(taskUrl('vvipclub_lotteryTask', {info, "withItem": true}), (err, resp, data) => {
@@ -385,7 +377,6 @@ function getTask(info) {
         })
     })
 }
-
 function doTask(taskName, taskItemId) {
     return new Promise(resolve => {
         $.get(taskUrl('vvipclub_doTask', {taskName, taskItemId}), (err, resp, data) => {
@@ -405,7 +396,6 @@ function doTask(taskName, taskItemId) {
         })
     })
 }
-
 function shakeBean() {
     return new Promise(resolve => {
         $.get(taskUrl('vvipclub_shaking', {"type": '0'}), (err, resp, data) => {
@@ -425,7 +415,6 @@ function shakeBean() {
         })
     })
 }
-
 //新版超级本摇一摇
 async function superShakeBean() {
     await superBrandMainPage();
@@ -444,7 +433,6 @@ async function superShakeBean() {
         console.log(`\n\n京东APP首页超级摇一摇：目前暂无活动\n\n`)
     }
 }
-
 function welcomeHome() {
     return new Promise(resolve => {
         const data = {
@@ -517,7 +505,6 @@ function welcomeHome() {
         })
     })
 }
-
 //=========老版本超级摇一摇================
 function getActInfo(url) {
     return new Promise(resolve => {
@@ -552,7 +539,6 @@ function getActInfo(url) {
         })
     })
 }
-
 function fc_getHomeData(appId, flag = false) {
     return new Promise(resolve => {
         const body = {appId}
@@ -594,7 +580,6 @@ function fc_getHomeData(appId, flag = false) {
         })
     })
 }
-
 async function doShakeTask(appId) {
     for (let vo of $.taskVos) {
         if (vo['taskType'] === 21) {
@@ -645,7 +630,6 @@ async function doShakeTask(appId) {
         }
     }
 }
-
 function fc_collectScore(body) {
     return new Promise(resolve => {
         const options = taskPostUrl('fc_collectScore', body)
@@ -668,7 +652,6 @@ function fc_collectScore(body) {
         })
     })
 }
-
 async function superShakeLottery(appId) {
     if ($.lotteryNum) console.log(`\n\n开始京东APP首页超级摇一摇 摇奖`);
     for (let i = 0; i < new Array($.lotteryNum).fill('').length; i++) {
@@ -680,7 +663,6 @@ async function superShakeLottery(appId) {
         allMessage += `京东账号${$.index}${$.nickName || $.UserName}\n${superShakeBeanConfig['superShakeTitle']}：获得${$.superShakeBeanNum}京豆${$.index !== cookiesArr.length ? '\n\n' : ''}`;
     }
 }
-
 function fc_getLottery(appId) {
     return new Promise(resolve => {
         const body = {appId, "taskId": $.lotTaskId}
@@ -714,7 +696,6 @@ function fc_getLottery(appId) {
         })
     })
 }
-
 //===================新版超级本摇一摇==============
 function superBrandMainPage() {
     return new Promise(resolve => {
@@ -755,7 +736,6 @@ function superBrandMainPage() {
         })
     })
 }
-
 function superBrandTaskList() {
     return new Promise(resolve => {
         $.taskList = [];
@@ -786,7 +766,6 @@ function superBrandTaskList() {
         })
     })
 }
-
 async function superBrandDoTaskFun() {
     $.taskList = $.taskList.filter(vo => !!vo && !vo['completionFlag'] && (vo['assignmentType'] !== 6 && vo['assignmentType'] !== 7 && vo['assignmentType'] !== 0 && vo['assignmentType'] !== 30));
     for (let item of $.taskList) {
@@ -844,7 +823,6 @@ async function superBrandDoTaskFun() {
         }
     }
 }
-
 function superBrandDoTask(body) {
     return new Promise(resolve => {
         const options = superShakePostUrl('superBrandDoTask', body)
@@ -874,7 +852,6 @@ function superBrandDoTask(body) {
         })
     })
 }
-
 async function lo() {
     const num = parseInt(($.userStarNum || 0) / 100);
     if (!$.canLottery) {
@@ -888,7 +865,6 @@ async function lo() {
         allMessage += `京东账号${$.index}${$.nickName || $.UserName}\n${superShakeBeanConfig['superShakeTitle']}：获得${$.superShakeBeanNum}京豆${$.index !== cookiesArr.length ? '\n\n' : ''}`;
     }
 }
-
 function superBrandTaskLottery() {
     return new Promise(resolve => {
         const body = {"activityId": $.activityId, "source": "main"}
@@ -929,7 +905,6 @@ function superBrandTaskLottery() {
         })
     })
 }
-
 //============超级品牌日==============
 async function superbrandShakeBean() {
     $.bradCanLottery = true;//是否有超级品牌日活动
@@ -948,7 +923,6 @@ async function superbrandShakeBean() {
     await qryCompositeMaterials();//做任务
     await superbrand_getGift();//抽奖
 }
-
 function superbrand_getMaterial() {
     return new Promise(resolve => {
         const body = {"brandActivityId": $.brandActivityId}
@@ -984,7 +958,6 @@ function superbrand_getMaterial() {
         })
     })
 }
-
 function qryCompositeMaterials(type = "productGroup", id = $.cmsTaskGroupId, mapTo = "Tasks0") {
     return new Promise(resolve => {
         const t1 = {type, id, mapTo}
@@ -1045,7 +1018,6 @@ function qryCompositeMaterials(type = "productGroup", id = $.cmsTaskGroupId, map
         })
     })
 }
-
 //做任务API
 function superbrand_doMyTask(body) {
     return new Promise(resolve => {
@@ -1069,7 +1041,6 @@ function superbrand_doMyTask(body) {
         })
     })
 }
-
 function superbrand_getGift() {
     return new Promise(resolve => {
         const body = {"brandActivityId": $.brandActivityId}
@@ -1113,7 +1084,6 @@ function superbrand_getGift() {
         })
     })
 }
-
 function superbrand_getHomeData() {
     return new Promise(resolve => {
         const body = {"brandActivityIds": $.brandActivityId}
@@ -1151,7 +1121,6 @@ function superbrand_getHomeData() {
         })
     })
 }
-
 //=======================京东会员签到========================
 async function shakeSign() {
     await pg_channel_page_data();
@@ -1175,7 +1144,6 @@ async function shakeSign() {
         console.log(`京东会员第${$.currSignCursor}天已签到`)
     }
 }
-
 function pg_channel_page_data() {
     const body = {
         "paramData": {"token": "dd2fb032-9fa3-493b-8cd0-0d57cd51812d"}
@@ -1220,7 +1188,6 @@ function pg_channel_page_data() {
         })
     })
 }
-
 function pg_interact_interface_invoke(body) {
     return new Promise(resolve => {
         const options = {
@@ -1297,7 +1264,6 @@ function TotalBean() {
         })
     })
 }
-
 function jsonParse(str) {
     if (typeof str == "string") {
         try {
@@ -1309,7 +1275,6 @@ function jsonParse(str) {
         }
     }
 }
-
 function taskUrl(function_id, body = {}, appId = 'vip_h5') {
     return {
         url: `${JD_API_HOST}?functionId=${function_id}&appid=${appId}&body=${escape(JSON.stringify(body))}&_=${Date.now()}`,
@@ -1321,7 +1286,6 @@ function taskUrl(function_id, body = {}, appId = 'vip_h5') {
         }
     }
 }
-
 function taskPostUrl(function_id, body) {
     return {
         url: `https://api.m.jd.com/client.action?functionId=${function_id}&body=${escape(JSON.stringify(body))}&client=wh5&clientVersion=1.0.0`,
@@ -1333,7 +1297,6 @@ function taskPostUrl(function_id, body) {
         }
     }
 }
-
 function superShakePostUrl(function_id, body) {
     return {
         url: `https://api.m.jd.com/client.action?functionId=${function_id}&appid=content_ecology&body=${escape(JSON.stringify(body))}&client=wh5&clientVersion=9.3.0&uuid=8888888&t=${Date.now()}`,
@@ -1345,7 +1308,6 @@ function superShakePostUrl(function_id, body) {
         }
     }
 }
-
 // prettier-ignore
 function Env(t, e) {
     "undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0);

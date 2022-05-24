@@ -536,7 +536,6 @@ function TotalBean() {
         })
     })
 }
-
 function isLoginByX1a0He() {
     return new Promise((resolve) => {
         const options = {
@@ -569,7 +568,6 @@ function isLoginByX1a0He() {
         });
     });
 }
-
 function jsonParse(str) {
     if (typeof str == "string") {
         try {
@@ -585,12 +583,10 @@ function jsonParse(str) {
 // prettier-ignore
 function Env(t, e) {
     "undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0);
-
     class s {
         constructor(t) {
             this.env = t
         }
-
         send(t, e = "GET") {
             t = "string" == typeof t ? {
                     url: t
@@ -604,16 +600,13 @@ function Env(t, e) {
                     })
                 })
         }
-
         get(t) {
             return this.send.call(this.env, t)
         }
-
         post(t) {
             return this.send.call(this.env, t, "POST")
         }
     }
-
     return new class {
         constructor(t, e) {
             this.name = t,
@@ -628,23 +621,18 @@ function Env(t, e) {
                 Object.assign(this, e),
                 this.log("", `🔔${this.name}, 开始!`)
         }
-
         isNode() {
             return "undefined" != typeof module && !!module.exports
         }
-
         isQuanX() {
             return "undefined" != typeof $task
         }
-
         isSurge() {
             return "undefined" != typeof $httpClient && "undefined" == typeof $loon
         }
-
         isLoon() {
             return "undefined" != typeof $loon
         }
-
         toObj(t, e = null) {
             try {
                 return JSON.parse(t)
@@ -652,7 +640,6 @@ function Env(t, e) {
                 return e
             }
         }
-
         toStr(t, e = null) {
             try {
                 return JSON.stringify(t)
@@ -660,7 +647,6 @@ function Env(t, e) {
                 return e
             }
         }
-
         getjson(t, e) {
             let s = e;
             const i = this.getdata(t);
@@ -671,7 +657,6 @@ function Env(t, e) {
                 }
             return s
         }
-
         setjson(t, e) {
             try {
                 return this.setdata(JSON.stringify(t), e)
@@ -679,7 +664,6 @@ function Env(t, e) {
                 return !1
             }
         }
-
         getScript(t) {
             return new Promise(e => {
                 this.get({
@@ -687,7 +671,6 @@ function Env(t, e) {
                 }, (t, s, i) => e(i))
             })
         }
-
         runScript(t, e) {
             return new Promise(s => {
                 let i = this.getdata("@chavy_boxjs_userCfgs.httpapi");
@@ -711,7 +694,6 @@ function Env(t, e) {
                 this.post(n, (t, e, i) => s(i))
             }).catch(t => this.logErr(t))
         }
-
         loaddata() {
             if (!this.isNode())
                 return {};
@@ -734,7 +716,6 @@ function Env(t, e) {
                 }
             }
         }
-
         writedata() {
             if (this.isNode()) {
                 this.fs = this.fs ? this.fs : require("fs"),
@@ -747,7 +728,6 @@ function Env(t, e) {
                 s ? this.fs.writeFileSync(t, r) : i ? this.fs.writeFileSync(e, r) : this.fs.writeFileSync(t, r)
             }
         }
-
         lodash_get(t, e, s) {
             const i = e.replace(/\[(\d+)\]/g, ".$1").split(".");
             let r = t;
@@ -756,11 +736,9 @@ function Env(t, e) {
                     return s;
             return r
         }
-
         lodash_set(t, e, s) {
             return Object(t) !== t ? t : (Array.isArray(e) || (e = e.toString().match(/[^.[\]]+/g) || []), e.slice(0, -1).reduce((t, s, i) => Object(t[s]) === t[s] ? t[s] : t[s] = Math.abs(e[i + 1]) >> 0 == +e[i + 1] ? [] : {}, t)[e[e.length - 1]] = s, t)
         }
-
         getdata(t) {
             let e = this.getval(t);
             if (/^@/.test(t)) {
@@ -776,7 +754,6 @@ function Env(t, e) {
             }
             return e
         }
-
         setdata(t, e) {
             let s = !1;
             if (/^@/.test(e)) {
@@ -796,11 +773,9 @@ function Env(t, e) {
                 s = this.setval(t, e);
             return s
         }
-
         getval(t) {
             return this.isSurge() || this.isLoon() ? $persistentStore.read(t) : this.isQuanX() ? $prefs.valueForKey(t) : this.isNode() ? (this.data = this.loaddata(), this.data[t]) : this.data && this.data[t] || null
         }
-
         setval(t, e) {
             return this.isSurge() || this.isLoon() ? $persistentStore.write(t, e) : this.isQuanX() ? $prefs.setValueForKey(t, e) : this.isNode() ? (this.data = this.loaddata(), this.data[e] = t, this.writedata(), !0) : this.data && this.data[e] || null
         }
@@ -921,7 +896,6 @@ function Env(t, e) {
                 })
             }
         }
-
         time(t, e = null) {
             const s = e ? new Date(e) : new Date;
             let i = {
@@ -938,7 +912,6 @@ function Env(t, e) {
                 new RegExp("(" + e + ")").test(t) && (t = t.replace(RegExp.$1, 1 == RegExp.$1.length ? i[e] : ("00" + i[e]).substr(("" + i[e]).length)));
             return t
         }
-
         msg(e = t, s = "", i = "", r) {
             const o = t => {
                 if (!t)
@@ -985,21 +958,17 @@ function Env(t, e) {
                     this.logs = this.logs.concat(t)
             }
         }
-
         log(...t) {
             t.length > 0 && (this.logs = [...this.logs, ...t]),
                 console.log(t.join(this.logSeparator))
         }
-
         logErr(t, e) {
             const s = !this.isSurge() && !this.isQuanX() && !this.isLoon();
             s ? this.log("", `❗️${this.name}, 错误!`, t.stack) : this.log("", `❗️${this.name}, 错误!`, t)
         }
-
         wait(t) {
             return new Promise(e => setTimeout(e, t))
         }
-
         done(t = {}) {
             const e = (new Date).getTime(),
                 s = (e - this.startTime) / 1e3;

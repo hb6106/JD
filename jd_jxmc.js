@@ -110,14 +110,15 @@ if ($.isNode()) {
     await pasture();
     await $.wait(2000);
   }
-  $.res = await getAuthorShareCode('')
+  $.res = await getAuthorShareCode('https://gitee.com/fatelight/Code/raw/master/jxmc.json')
   if (!$.res) {
-    $.http.get({url: ''}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
-    await $.wait(1000)
-    $.res = await getAuthorShareCode('')
+      $.http.get({url: 'https://gitee.com/fatelight/Code/raw/master/jxmc.json'}).then((resp) => {
+      }).catch((e) => console.log('刷新CDN异常', e));
+      await $.wait(1000)
+      $.res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jxmc.json')
   }
-  $.res = [...($.res || []), ...(await getAuthorShareCode('') || [])]
-  await shareCodesFormat()
+    $.res = [...($.res || []), ...(await getAuthorShareCode('https://raw.fastgit.org/zero205/updateTeam/main/shareCodes/jxmc2.json') || [])]
+    await shareCodesFormat()
   for (let i = 0; i < cookiesArr.length; i++) {
     $.cookie = cookiesArr[i];
     $.UserName = decodeURIComponent($.cookie.match(/pt_pin=([^; ]+)(?=;?)/) && $.cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);

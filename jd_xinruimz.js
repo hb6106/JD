@@ -159,7 +159,6 @@ async function main() {
         $.log('获取Token失败')
     }
 }
-
 async function plantinfo() {
     plantinfoX = [];
     let plantinfo = $.plantinfo;
@@ -174,7 +173,6 @@ async function plantinfo() {
     }
     $.infoArr = plantinfoX.filter(item => item.id != undefined);
 }
-
 async function fertilizerdotask() {
     $.goldstatus = true;
     if ($.fertilizerlist && $.fertilizertasklist) {
@@ -241,7 +239,6 @@ async function fertilizerdotask() {
         }
     }
 }
-
 async function waterdotask() {
     await task('water_task_info');
     await task('water_task_state');
@@ -283,7 +280,6 @@ async function waterdotask() {
         $.log('没有获取到任务列表！')
     }
 }
-
 async function task(function_id, body) {
     return new Promise(async resolve => {
         $.get(taskUrl(function_id, body), async (err, resp, data) => {
@@ -368,7 +364,6 @@ async function task(function_id, body) {
         })
     })
 }
-
 function taskPost(function_id, body) {
     return new Promise(async resolve => {
         $.post(taskPostUrl(function_id, body), async (err, resp, data) => {

@@ -66,7 +66,7 @@ const JD_API_HOST = `https://api.m.jd.com/client.action`;
         }
     }
     ;
-    $.shareCoseList = [...new Set([...$.shareCoseList, ''])]
+    $.shareCoseList = [...new Set([...$.shareCoseList, 'QmLpaFXm34BaWgn3C3O2WA', 'ffn_Yc--WKEab2iPzmVB4BM3VKR8-0h7mdYsY627fC0', 'c_HK4TBhdsqsRJPgFj7RpA'])]
     //去助力与开箱
     for (let i = 0; i < cookiesArr.length; i++) {
         cookie = cookiesArr[i];
@@ -385,7 +385,6 @@ function jsonParse(str) {
         }
     }
 }
-
 // prettier-ignore
 function Env(t, e) {
     "undefined" != typeof process && JSON.stringify(process.env).indexOf("GITHUB") > -1 && process.exit(0);

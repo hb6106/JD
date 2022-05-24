@@ -122,7 +122,6 @@ function ENV() {
     const isScriptable = typeof importModule !== "undefined";
     return {isQX, isLoon, isSurge, isNode, isJSBox, isRequest, isScriptable}
 }
-
 // prettier-ignore
 function HTTP(baseURL, defaultOptions = {}) {
     const {isQX, isLoon, isSurge, isScriptable, isNode} = ENV();
@@ -183,7 +182,6 @@ function HTTP(baseURL, defaultOptions = {}) {
     methods.forEach((method) => (http[method.toLowerCase()] = (options) => send(method, options)));
     return http
 }
-
 // prettier-ignore
 function API(name = "untitled", debug = false) {
     const {isQX, isLoon, isSurge, isNode, isJSBox, isScriptable} = ENV();

@@ -31,15 +31,17 @@ def randomuserAgent():
         ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
          'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'z'], 40))
     addressid = ''.join(random.sample('1234567898647', 10))
-    iosVer = ''.join(random.sample(["15.1.1","14.5.1", "14.4", "14.3", "14.2", "14.1", "14.0.1"], 1))
+    iosVer = ''.join(random.sample(["15.1.1", "14.5.1", "14.4", "14.3", "14.2", "14.1", "14.0.1"], 1))
     iosV = iosVer.replace('.', '_')
-    clientVersion=''.join(random.sample(["10.3.0", "10.2.7", "10.2.4"], 1))
+    clientVersion = ''.join(random.sample(["10.3.0", "10.2.7", "10.2.4"], 1))
     iPhone = ''.join(random.sample(["8", "9", "10", "11", "12", "13"], 1))
-    ADID = ''.join(random.sample('0987654321ABCDEF', 8)) + '-' + ''.join(random.sample('0987654321ABCDEF', 4)) + '-' + ''.join(random.sample('0987654321ABCDEF', 4)) + '-' + ''.join(random.sample('0987654321ABCDEF', 4)) + '-' + ''.join(random.sample('0987654321ABCDEF', 12))
-    
-    
-    area=''.join(random.sample('0123456789', 2)) + '_' + ''.join(random.sample('0123456789', 4)) + '_' + ''.join(random.sample('0123456789', 5)) + '_' + ''.join(random.sample('0123456789', 4))
-    lng='119.31991256596'+str(random.randint(100,999))
+    ADID = ''.join(random.sample('0987654321ABCDEF', 8)) + '-' + ''.join(
+        random.sample('0987654321ABCDEF', 4)) + '-' + ''.join(random.sample('0987654321ABCDEF', 4)) + '-' + ''.join(
+        random.sample('0987654321ABCDEF', 4)) + '-' + ''.join(random.sample('0987654321ABCDEF', 12))
+
+    area = ''.join(random.sample('0123456789', 2)) + '_' + ''.join(random.sample('0123456789', 4)) + '_' + ''.join(
+        random.sample('0123456789', 5)) + '_' + ''.join(random.sample('0123456789', 4))
+    lng = '119.31991256596' + str(random.randint(100, 999))
     lat='26.1187118976'+str(random.randint(100,999))
     
     

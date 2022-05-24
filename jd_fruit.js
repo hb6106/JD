@@ -63,7 +63,7 @@ if (Fileexists) {
 
 let WP_APP_TOKEN_ONE = "";
 /* if ($.isNode()) {
-	if (process.env.WP_APP_TOKEN_ONE) {
+	if (process.env.WP_APP_TOKEN_ONE) {		
 		WP_APP_TOKEN_ONE = process.env.WP_APP_TOKEN_ONE;
 	}
 }
@@ -489,8 +489,7 @@ async function doTenWaterAgain() {
                 break;
             }
         }
-        if ($.myCardInfoRes.beanCard > 0)
-            return;
+        return;
     }
     // if (totalEnergy > 100 && $.myCardInfoRes.fastCard > 0) {
     //   //使用快速浇水卡
